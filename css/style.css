@@ -1,0 +1,583 @@
+/* ==========================================================================
+   CONNECTED MENA — AI Literacy Training — Slide Deck
+   Brand: Charcoal #1C1B19 · Sand #FEFBF0 · Forest #2A5A4E · Warm Grey #A2998F
+          Evergreen #4EA38C · Mint #AAE5C9 · Oasis #C3F4AE · Spring #E7F9E0 · Sky Blue #CFEAFD
+   Fonts: Funnel Sans (brand, free) for body/UI. Fraunces (free stand-in for the
+          paid "Season Serif") for headlines — swap when the licensed font is bought.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Funnel Sans";
+  src: url("../assets/fonts/FunnelSans-VariableFont_wght.ttf") format("truetype-variations"),
+       url("../assets/fonts/FunnelSans-VariableFont_wght.ttf") format("truetype");
+  font-weight: 300 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fraunces";
+  src: url("../assets/fonts/Fraunces-Variable.woff2") format("woff2-variations"),
+       url("../assets/fonts/Fraunces-Variable.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --charcoal: #1C1B19;
+  --sand: #FEFBF0;
+  --white: #FFFFFF;
+  --warm-grey: #A2998F;
+  --forest: #2A5A4E;
+  --evergreen: #4EA38C;
+  --mint: #AAE5C9;
+  --oasis: #C3F4AE;
+  --spring: #E7F9E0;
+  --sky-blue: #CFEAFD;
+
+  --font-head: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body: "Funnel Sans", -apple-system, "Segoe UI", sans-serif;
+
+  --slide-pad-x: clamp(2rem, 6vw, 6rem);
+  --slide-pad-y: clamp(1.5rem, 6vh, 4rem);
+  --eyebrow-tracking: 0.16em;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--sand);
+  color: var(--forest);
+  font-family: var(--font-body);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-head);
+  font-weight: 500;
+  margin: 0;
+  color: var(--charcoal);
+  /* Brand rule: headlines are sentence case, never italic. */
+  font-style: normal;
+}
+
+p { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
+img { max-width: 100%; display: block; }
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(0.75rem, 1vw, 0.95rem);
+  letter-spacing: var(--eyebrow-tracking);
+  text-transform: uppercase;
+  color: var(--evergreen);
+  margin-bottom: 0.9em;
+}
+
+.eyebrow.on-dark { color: var(--oasis); }
+
+/* ==========================================================================
+   Deck mechanics — CSS scroll-snap is the ground truth (works with zero JS:
+   trackpad, mouse wheel, touch, PageUp/PageDown all snap natively). JS layers
+   on precise keyboard jumps and a live slide-position readout.
+   ========================================================================== */
+
+.deck {
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deck { scroll-behavior: auto; }
+}
+
+.slide {
+  height: 100vh;
+  height: 100dvh;
+  width: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--slide-pad-y) var(--slide-pad-x);
+  overflow: hidden;
+}
+
+.slide-inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 74rem;
+  margin: 0 auto;
+}
+
+/* Slide background variants */
+.slide.on-sand { background: var(--sand); color: var(--forest); }
+
+.slide.on-gradient {
+  background: linear-gradient(135deg, var(--forest) 0%, var(--evergreen) 48%, var(--mint) 100%);
+  color: var(--white);
+}
+.slide.on-gradient h1,
+.slide.on-gradient h2,
+.slide.on-gradient h3 { color: var(--white); }
+
+.slide.on-charcoal {
+  background: linear-gradient(160deg, var(--charcoal) 0%, #33312c 100%);
+  color: var(--sand);
+}
+.slide.on-charcoal h1,
+.slide.on-charcoal h2,
+.slide.on-charcoal h3 { color: var(--sand); }
+
+.slide.on-tint { background: var(--spring); color: var(--forest); }
+
+/* Solution half of a problem/solution pair — a deeper green than on-tint
+   to read as a clear mode-shift, and matches the solution tag-pill's own
+   color so the pairing feels intentional rather than arbitrary. */
+.slide.on-oasis { background: var(--oasis); color: var(--forest); }
+.slide.on-oasis .tag-pill.solution { background: var(--white); }
+
+/* Grain overlay — brand guide calls for "a subtle grain effect...for a
+   grounded and human look" on ecosystem gradients. Generated inline so it
+   works fully offline, no image asset needed. */
+.slide.on-gradient::after,
+.slide.on-charcoal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ==========================================================================
+   Progress / position indicator
+   ========================================================================== */
+
+.deck-hud {
+  position: fixed;
+  bottom: clamp(1rem, 3vh, 2rem);
+  right: clamp(1.25rem, 4vw, 3rem);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--forest);
+  background: rgba(254, 251, 240, 0.85);
+  backdrop-filter: blur(6px);
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(42, 90, 78, 0.15);
+  pointer-events: none;
+}
+
+.deck-hud .bar {
+  width: 4rem;
+  height: 3px;
+  background: rgba(42, 90, 78, 0.18);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.deck-hud .bar > span {
+  display: block;
+  height: 100%;
+  background: var(--evergreen);
+  transition: width 0.25s ease;
+}
+
+/* ==========================================================================
+   Shared content pieces
+   ========================================================================== */
+
+.headline-xl {
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.headline-lg {
+  font-size: clamp(2rem, 4.2vw, 3.4rem);
+  line-height: 1.1;
+}
+
+.subhead {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  line-height: 1.5;
+  color: var(--warm-grey);
+  max-width: 40rem;
+  margin-top: 1.2rem;
+}
+.slide.on-gradient .subhead,
+.slide.on-charcoal .subhead { color: var(--spring); opacity: 0.85; }
+
+.meta-row {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 2.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.logo-mark {
+  position: absolute;
+  top: clamp(1.5rem, 4vh, 2.5rem);
+  left: var(--slide-pad-x);
+  height: clamp(1.2rem, 2vw, 1.6rem);
+  z-index: 3;
+  opacity: 0.92;
+}
+
+.slide-number {
+  position: absolute;
+  top: clamp(1.5rem, 4vh, 2.5rem);
+  right: var(--slide-pad-x);
+  z-index: 3;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--warm-grey);
+  letter-spacing: 0.05em;
+}
+.slide.on-gradient .slide-number,
+.slide.on-charcoal .slide-number { color: rgba(255,255,255,0.65); }
+
+/* Bullet list with icon markers */
+.icon-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  margin-top: 2.2rem;
+}
+.icon-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  font-size: clamp(1.1rem, 1.9vw, 1.5rem);
+  line-height: 1.4;
+}
+.icon-list img {
+  width: clamp(1.6rem, 2.4vw, 2.1rem);
+  height: clamp(1.6rem, 2.4vw, 2.1rem);
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+/* Card grid (roadmap, tool categories) */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+.card {
+  background: var(--white);
+  border: 1px solid rgba(42, 90, 78, 0.12);
+  border-radius: 1.1rem;
+  padding: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.card .card-icon {
+  width: 2.4rem;
+  height: 2.4rem;
+}
+.card .card-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--evergreen);
+}
+.card h3 {
+  font-size: 1.35rem;
+  font-weight: 500;
+}
+.card p {
+  color: var(--warm-grey);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+/* Standalone dot-bullet list (plain content slides) */
+.bullets { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 2.2rem; }
+.bullets li {
+  font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+  line-height: 1.5;
+  padding-left: 1.2rem;
+  position: relative;
+  max-width: 42rem;
+}
+.bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--evergreen);
+}
+
+/* Break / interstitial slide */
+.break-clock {
+  font-family: var(--font-head);
+  font-size: clamp(4rem, 12vw, 8rem);
+  color: var(--white);
+  line-height: 1;
+}
+
+/* Two-column comparison */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin-top: 2.5rem;
+  border-radius: 1.2rem;
+  overflow: hidden;
+  border: 1px solid rgba(42, 90, 78, 0.15);
+}
+.split-col {
+  padding: 2.2rem 2rem;
+}
+.split-col:first-child {
+  background: var(--white);
+  border-right: 1px solid rgba(42, 90, 78, 0.15);
+}
+.split-col:last-child { background: var(--spring); }
+.split-col .split-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--warm-grey);
+  margin-bottom: 1rem;
+}
+.split-col ul { display: flex; flex-direction: column; gap: 0.7rem; }
+.split-col li {
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.45;
+  padding-left: 1.1rem;
+  position: relative;
+}
+.split-col li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--evergreen);
+}
+
+/* Pull quote / statement slide */
+.statement {
+  font-family: var(--font-head);
+  font-weight: 500;
+  font-size: clamp(1.8rem, 4.4vw, 3.4rem);
+  line-height: 1.2;
+  max-width: 52rem;
+}
+.statement .attribution {
+  display: block;
+  margin-top: 2rem;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+/* Stacked statement group — for slides with 2+ short quotes rather than
+   one giant pull-quote */
+.statement-group { display: flex; flex-direction: column; gap: 1.6rem; }
+.statement-group .statement {
+  font-size: clamp(1.5rem, 3.2vw, 2.4rem);
+  max-width: 46rem;
+}
+
+/* Small icon above an eyebrow — used to give a run of same-template
+   content slides (e.g. failure modes) a quick visual anchor */
+.mode-icon {
+  width: clamp(2rem, 3vw, 2.6rem);
+  height: clamp(2rem, 3vw, 2.6rem);
+  margin-bottom: 1.4rem;
+}
+
+/* Small muted source citation */
+.citation {
+  margin-top: 1.6rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--warm-grey);
+  max-width: 38rem;
+}
+
+/* Logo strip — small partner/program logos in a row */
+.logo-strip {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 2.2rem;
+  flex-wrap: wrap;
+}
+.logo-strip img { height: 1.4rem; width: auto; opacity: 0.85; }
+
+/* Problem / Solution tag pill */
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem 0.4rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1.6rem;
+  width: fit-content;
+}
+.tag-pill img { width: 1.1rem; height: 1.1rem; }
+.tag-pill.problem { background: rgba(162, 153, 143, 0.22); color: var(--charcoal); }
+.tag-pill.solution { background: var(--oasis); color: var(--forest); }
+
+/* Numbered activity steps */
+.steps { display: flex; flex-direction: column; gap: 1.3rem; margin-top: 2.2rem; }
+.step { display: flex; gap: 1.1rem; align-items: flex-start; }
+.step .num {
+  flex-shrink: 0;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  background: var(--forest);
+  color: var(--sand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.step p { font-size: clamp(1rem, 1.6vw, 1.2rem); line-height: 1.5; padding-top: 0.15rem; }
+
+/* Diagram / media placeholder — for content added in a future pass */
+.diagram-placeholder {
+  margin-top: 2.5rem;
+  border: 2px dashed var(--warm-grey);
+  border-radius: 1.2rem;
+  min-height: 16rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  color: var(--warm-grey);
+  text-align: center;
+  padding: 2rem;
+}
+.diagram-placeholder .ph-title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+.diagram-placeholder p { max-width: 32rem; font-size: 0.95rem; }
+
+/* Photo + text side-by-side — e.g. About me. The photo keeps its natural
+   aspect ratio (no forced crop); the text column complements its shape
+   rather than fighting it. */
+.photo-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: center;
+  margin-top: 2.2rem;
+}
+.photo-split img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 1.1rem;
+}
+@media (max-width: 720px) {
+  .photo-split { grid-template-columns: 1fr; }
+}
+
+/* Axis / floor-grid diagram — e.g. a "four corners" activity where the room
+   maps onto two crossing spectrums */
+.axis-card {
+  background: var(--white);
+  border: 1px solid rgba(42, 90, 78, 0.12);
+  border-radius: 1.1rem;
+  padding: 2rem 4.75rem;
+  max-width: 26rem;
+  margin-top: 2.5rem;
+}
+.axis-diagram {
+  position: relative;
+  width: 100%;
+  padding: 2.4rem 1.7rem;
+}
+.axis-diagram .axis-svg-wrap {
+  aspect-ratio: 1 / 1;
+}
+.axis-svg { width: 100%; height: 100%; display: block; }
+.axis-label {
+  position: absolute;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  white-space: nowrap;
+}
+.axis-label.axis-top { top: 0; left: 50%; transform: translateX(-50%); }
+.axis-label.axis-bottom { bottom: 0; left: 50%; transform: translateX(-50%); }
+/* Anchored so the label grows away from the diagram, not into it */
+.axis-label.axis-left { right: 100%; top: 50%; transform: translateY(-50%); margin-right: 0.6rem; }
+.axis-label.axis-right { left: 100%; top: 50%; transform: translateY(-50%); margin-left: 0.6rem; }
+
+/* Section index footer note (kept off dark slides automatically via color) */
+.section-index {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: clamp(3rem, 9vw, 7rem);
+  color: rgba(255,255,255,0.28);
+  position: absolute;
+  top: clamp(1.5rem, 5vh, 3rem);
+  right: var(--slide-pad-x);
+  line-height: 1;
+}
+
+@media (max-width: 640px) {
+  .split { grid-template-columns: 1fr; }
+  .split-col:first-child { border-right: none; border-bottom: 1px solid rgba(42,90,78,0.15); }
+}
