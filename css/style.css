@@ -565,6 +565,9 @@ img { max-width: 100%; display: block; }
 .axis-label.axis-left { right: 100%; top: 50%; transform: translateY(-50%); margin-right: 0.6rem; }
 .axis-label.axis-right { left: 100%; top: 50%; transform: translateY(-50%); margin-left: 0.6rem; }
 
+/* Single-word prompt card — flashed on screen for a quick drawing-game round */
+.slide.center-word .slide-inner { text-align: center; }
+
 /* Section index footer note (kept off dark slides automatically via color) */
 .section-index {
   font-family: var(--font-body);
