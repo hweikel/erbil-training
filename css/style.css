@@ -611,3 +611,43 @@ img { max-width: 100%; display: block; }
   .split { grid-template-columns: 1fr; }
   .split-col:first-child { border-right: none; border-bottom: 1px solid rgba(42,90,78,0.15); }
 }
+
+/* Data table — curriculum blueprint walkthroughs, filled-in rubric rows.
+   Scrolls horizontally on its own rather than the slide, in case a grade
+   band ever grows past what a 16:9 slide can hold at a readable size. */
+.table-wrap {
+  margin-top: 2.2rem;
+  border-radius: 1.1rem;
+  overflow: auto;
+  border: 1px solid rgba(42, 90, 78, 0.15);
+  max-width: 100%;
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
+}
+.data-table th,
+.data-table td {
+  padding: 0.65rem 0.9rem;
+  text-align: left;
+  vertical-align: top;
+}
+.data-table th {
+  background: var(--forest);
+  color: var(--sand);
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.data-table td {
+  font-size: clamp(0.72rem, 1vw, 0.92rem);
+  line-height: 1.42;
+  color: var(--charcoal);
+  border-top: 1px solid rgba(42, 90, 78, 0.1);
+}
+.data-table tbody tr:nth-child(even) td { background: var(--spring); }
+.data-table td:first-child { font-weight: 700; color: var(--forest); }
