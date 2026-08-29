@@ -592,6 +592,46 @@ img { max-width: 100%; display: block; }
 }
 .zone-arrow-svg { width: 1.5rem; height: 1.25rem; margin: 0 auto; display: block; }
 
+/* Concentric nesting diagram — e.g. AI > ML > DL > GenAI > LLM, each ring
+   literally containing the next rather than a bullet list implying it. */
+.nesting-diagram {
+  margin-top: 2.4rem;
+  max-width: 46rem;
+}
+.nest-ring {
+  border-radius: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.9rem;
+}
+.nest-1 { background: var(--forest); color: var(--white); padding: 1.8rem; }
+.nest-2 { background: var(--evergreen); color: var(--white); padding: 1.5rem; }
+.nest-3 { background: var(--mint); color: var(--charcoal); padding: 1.3rem; }
+.nest-4 { background: var(--oasis); color: var(--charcoal); padding: 1.1rem; }
+.nest-5 { background: var(--spring); color: var(--charcoal); padding: 0.9rem 1.3rem; }
+.nest-label {
+  font-family: var(--font-head);
+  font-weight: 500;
+  font-size: clamp(0.95rem, 1.6vw, 1.3rem);
+}
+.nest-label small {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.68em;
+  opacity: 0.85;
+  margin-top: 0.25rem;
+}
+
+/* Zone diagram, row variant — parallel (non-progressive) categories laid
+   out side by side rather than stacked with arrows between them. */
+.zone-row {
+  flex-direction: row;
+  gap: 1rem;
+}
+.zone-row .zone-band { flex: 1; }
+
 /* Single-word prompt card — flashed on screen for a quick drawing-game round */
 .slide.center-word .slide-inner { text-align: center; }
 
